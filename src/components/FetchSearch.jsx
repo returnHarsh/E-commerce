@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import CardComponent from './Card';
 
-function FetchSearch() {
+function FetchSearch({setCartCount}) {
 
     const {query} = useParams();
     const [searchProducts , setSearchProducts] = useState();
@@ -50,7 +50,7 @@ function FetchSearch() {
 
             <Grid rowGap={8} columnGap={5} templateColumns={`repeat(${columnCount}, 1fr)`} >
                 {searchProducts.map((e)=>{
-                    return <CardComponent key={e.id} product={e}/>
+                    return <CardComponent setCartCount = {setCartCount} key={e.id} product={e}/>
                 })}
             </Grid>
 

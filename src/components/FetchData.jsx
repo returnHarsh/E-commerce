@@ -4,7 +4,7 @@ import { Box, Flex , Spinner , Text} from '@chakra-ui/react';
 import CardComponent from './Card';
 import { Grid, GridItem, useBreakpointValue } from '@chakra-ui/react';
 
-function FetchData() {
+function FetchData({setCartCount}) {
 
     const [products , setProducts] = useState([]);
     const [isProductLoading , setIsProductLoading] = useState(true);
@@ -45,7 +45,7 @@ function FetchData() {
     <Text>{title}</Text>
      <Grid rowGap={8} columnGap={5} templateColumns={`repeat(${columnCount}, 1fr)`} >
        {products.map((product)=>{
-        return <CardComponent key={product.id} product={product}/>
+        return <CardComponent setCartCount={setCartCount} key={product.id} product={product}/>
        })}
        </Grid>
    </Box>

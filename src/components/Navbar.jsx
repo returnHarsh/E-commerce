@@ -9,7 +9,7 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import userAtom from '../atoms/userAtom';
 import cartAtom from '../atoms/cartDetailsAtom';
 
-function Navbar() {
+function Navbar({cartCount}) {
 
 
     const [search, setSearch] = useState("");
@@ -17,7 +17,6 @@ function Navbar() {
     const [categories, setCateories] = useState([]);
     const [isCategoryLoading, setIsCategoryLoading] = useState(true);
     const [user, setUser] = useRecoilState(userAtom);
-    const cartItems = useRecoilValue(cartAtom);
 
 
 
@@ -81,7 +80,7 @@ function Navbar() {
 
                 <Flex alignItems={"center"}>
                     <Icon onClick={() => navigate("/cart")} boxSize={7} cursor={"pointer"} as={FaShoppingCart} />
-                    <Text marginLeft={"5px"}> {cartItems.items}  </Text>
+                    <Text marginLeft={"5px"}>  {cartCount}  </Text>
                 </Flex>
 
                 <Flex>

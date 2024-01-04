@@ -5,22 +5,42 @@ import { useToast } from '@chakra-ui/react';
 import { useRecoilState } from 'recoil';
 import cartAtom from '../atoms/cartDetailsAtom';
 
-function CartComponent({product , setCart}) {
+function CartComponent({product , setCart , setCartDetails , setCartCount}) {
 
-    const[cartDetails , setCartDetails] = useRecoilState(cartAtom);
+    // const[cartDetails , setCartDetails] = useRecoilState(cartAtom);
 
     const toast = useToast();
 
     const deleteCartHandler = async()=>{
+        // const id = product.id;
+        // let newCart = localStorage.getItem("cart");
+        // newCart = JSON.parse(newCart);
+        // newCart = newCart.filter((e)=>{
+        //     return (e.id != id)
+        // });
+        // localStorage.setItem("cart" , JSON.stringify(newCart));
+        // setCart(newCart);
+        // setCartDetails({items : newCart.length , price : cartDetails.price-product.price});
+
         const id = product.id;
-        let newCart = localStorage.getItem("cart");
-        newCart = JSON.parse(newCart);
-        newCart = newCart.filter((e)=>{
+        let storedCart = localStorage.getItem("cart");
+        storedCart = JSON.parse(storedCart);
+        let products = storedCart.products;
+       products = products.filter((e)=>{
             return (e.id != id)
-        });
-        localStorage.setItem("cart" , JSON.stringify(newCart));
-        setCart(newCart);
-        setCartDetails({items : newCart.length , price : cartDetails.price-product.price});
+        })
+        let price = storedCart.price;
+        price = price - product.price;
+
+        let items = storedCart.items -1;
+        
+        storedCart.products = products;
+        storedCart.price = price;
+        storedCart.items = items;
+        localStorage.setItem("cart" , JSON.stringify(storedCart));
+        setCart(products);
+        setCartDetails({price,items})
+        setCartCount(items);
         showToast();
     }
     

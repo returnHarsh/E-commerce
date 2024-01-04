@@ -4,27 +4,27 @@ import CartComponent from './CartComponent';
 import { useRecoilState } from 'recoil';
 import cartAtom from '../atoms/cartDetailsAtom';
 
-function Cart() {
+function Cart({setCartCount}) {
 
-    const [cartDetails , setCartDetails] = useRecoilState(cartAtom);
 
     const [cart , setCart] = useState([]);
     const [cartLoading , setCartLoading] = useState(true);
+    const [cartDetails , setCartDetails] = useState({items : 0 , price : 0});
    
 
 useEffect(()=>{
     const getCartItems = async()=>{
         try{
-            let cartItems = localStorage.getItem("cart");
-            cartItems = JSON.parse(cartItems);
-            setCart(cartItems? cartItems : []);
+            let cart = localStorage.getItem("cart");
+            cart =JSON.parse(cart);
 
-
-            let totalPrice = 0;
-            cartItems.map((e)=>{
-                totalPrice += e.price;
-            })
-            setCartDetails({items : cartItems.length , price : totalPrice});
+            if(cart){
+                setCart(cart.products);
+                setCartDetails({items : cart.items , price : cart.price});
+            }
+            else{
+                setCart([]);
+            }
 
         }catch(error){
             console.log(error);
@@ -34,6 +34,7 @@ useEffect(()=>{
     }
 
     getCartItems();
+    console.log('inside use state');
 },[])
 
 if(!cartLoading && cart.length == 0){
@@ -46,14 +47,14 @@ if(!cartLoading && cart.length == 0){
     <Flex marginTop={"50px"} flexDirection={"column"}>
 
         <Flex width={"100%"}>
-            <Text flex={1} color={"gray.400"}>Total Cart Items : {cartDetails.items}   </Text>
-            <Text flex={1} color={"gray.400"} >Total Price : {cartDetails.price} </Text>
+            <Text flex={1} color={"gray.400"}>Total Cart Items : {cartDetails.items}  </Text>
+            <Text flex={1} color={"gray.400"} >Total Price : {cartDetails.price}  </Text>
         </Flex>
 
 
 <Flex gap={"20px"} marginTop={"50px"} width={"100%"} flexDirection={"column"}>
-{cart.map((product)=>{
-            return <CartComponent  setCart = {setCart} key={product.id} product={product} />
+{cart.map((product , index)=>{
+            return <CartComponent setCartCount={setCartCount}  setCartDetails = {setCartDetails} setCart = {setCart} key={index} product={product} />
         })}
 </Flex>
         

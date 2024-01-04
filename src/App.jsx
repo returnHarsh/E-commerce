@@ -15,8 +15,20 @@ import Cart from './components/Cart';
 function App() {
   const navigate = useNavigate();
   const [category , setCategory] = useState();
+  const [cartCount , setCartCount] = useState(0);
 
   const user = useRecoilValue(userAtom);
+
+  useState(()=>{
+    let cart = localStorage.getItem("cart");
+    if(cart) {
+      cart = JSON.parse(cart)
+      setCartCount(cart.items);
+    }
+    else{
+      setCartCount(0);
+    }
+  },[])
 
 
   const handleSelectChange = async(e)=>{
@@ -27,14 +39,14 @@ function App() {
     <Box p={5} minHeight={"100vh"} w={"100%"} h={"100%"} bg={"gray.900"} color={"white"}>
 
 
-      {user && <Navbar/>}
+      {user && <Navbar cartCount={cartCount} />}
       <Routes>
-        <Route path='/' element={ user? <FetchData/> : <Login/> } />
+        <Route path='/' element={ user? <FetchData setCartCount={setCartCount} /> : <Login/> } />
         <Route path='/product/:id' element={user ? <Product/> : <Login/>} />
-        <Route path='/:query' element={user ? <FetchSearch/> : <Login/>}/>
-        <Route path='/category/:cat' element={user ? <FetchByCategory/> : <Login/>}/>
+        <Route path='/:query' element={user ? <FetchSearch setCartCount={setCartCount} /> : <Login/>}/>
+        <Route path='/category/:cat' element={user ? <FetchByCategory setCartCount = {setCartCount} /> : <Login/>}/>
         <Route path='/login' element={<Login/>} />
-        <Route path='/cart' element={ user? <Cart/> : <Login/> }  />
+        <Route path='/cart' element={ user? <Cart setCartCount={setCartCount} /> : <Login/> }  />
       </Routes>
      </Box>
   )
